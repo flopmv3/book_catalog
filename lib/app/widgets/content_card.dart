@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import '../../data/content/content.dart';
 
-import '../features/home/book_mock.dart';
+class ContentCardFromContent extends StatelessWidget {
+  final Content content;
 
-class ContentCard extends StatelessWidget {
-  final Book book;
-
-  const ContentCard({
+  const ContentCardFromContent({
     super.key,
-    required this.book,
+    required this.content,
   });
 
   @override
@@ -16,7 +14,6 @@ class ContentCard extends StatelessWidget {
     const imageSize = 100.0;
 
     return InkWell(
-      onTap: () => context.push('/content/${book.id}'),
       borderRadius: BorderRadius.circular(16),
       child: SizedBox(
         height: imageSize,
@@ -25,11 +22,19 @@ class ContentCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: Image.asset(
-                book.imagePath,
+              child: Image.network(
+                content.image,
                 height: imageSize,
                 width: imageSize,
                 fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) {
+                  return Container(
+                    height: imageSize,
+                    width: imageSize,
+                    color: Colors.grey[300],
+                    child: const Icon(Icons.book),
+                  );
+                },
               ),
             ),
             const SizedBox(width: 16),
@@ -39,15 +44,21 @@ class ContentCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    book.title,
+                    content.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
+                  Text(
+                    content.author,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                   const SizedBox(height: 4),
                   Expanded(
                     child: Text(
-                      book.description,
+                      content.description,
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodyMedium,

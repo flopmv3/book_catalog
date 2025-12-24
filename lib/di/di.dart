@@ -5,30 +5,44 @@ import 'package:talker_flutter/talker_flutter.dart';
 import '../data/dio/set_up.dart';
 import '../data/content/content_repository.dart';
 import '../data/content/content_repository_interface.dart';
+import '../data/content/content_details_repository.dart';
+import '../data/content/content_details_repository_interface.dart';
 import '../app/features/home/bloc/home_bloc.dart';
+import '../app/features/content/bloc/content_details_bloc.dart';
 
 final getIt = GetIt.instance;
 
 // Логгер
 final talker = TalkerFlutter.init();
 
-// HTTP-клиент Dio (один на всё приложение)
+// HTTP-клиент
 final Dio dio = Dio();
 
 Future<void> setupLocator() async {
-  // Настраиваем Dio (baseUrl, логгер и т.п.)
   setUpDio();
 
-  // Регистрируем логгер
+  // Логгер
   getIt.registerSingleton<Talker>(talker);
 
-  // Регистрируем репозиторий контента (книг)
+  // Репозиторий списка
   getIt.registerSingleton<ContentRepositoryInterface>(
     ContentRepository(dio: dio),
   );
 
-  // Регистрируем BLoC для домашнего экрана
+  // BLoC списка
   getIt.registerSingleton<HomeBloc>(
     HomeBloc(getIt.get<ContentRepositoryInterface>()),
+  );
+
+  // Репозиторий деталей
+  getIt.registerSingleton<ContentDetailsRepositoryInterface>(
+    ContentDetailsRepository(dio: dio),
+  );
+
+  // BLoC деталей
+  getIt.registerSingleton<ContentDetailsBloc>(
+    ContentDetailsBloc(
+      getIt.get<ContentDetailsRepositoryInterface>(),
+    ),
   );
 }

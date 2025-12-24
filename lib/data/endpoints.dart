@@ -1,10 +1,10 @@
 class Endpoints {
   Endpoints._();
 
-  // поиск книг
-  // итоговый URL: https://openlibrary.org/search.json?q=harry+potter
+  // список книг (поиск)
   static const String content = '/search.json';
 
-  // на будущее: детальная книга по ключу (например, "/works/OL82563W")
-  static String workByKey(String key) => '$key.json';
+  // детальная информация о книге (work)
+  // итоговый URL: https://openlibrary.org/works/{id}.json
+  static String workById(String id) => '/works/$id.json';
 }

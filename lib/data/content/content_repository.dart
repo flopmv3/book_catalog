@@ -21,17 +21,19 @@ class ContentRepository implements ContentRepositoryInterface {
         },
       );
 
-      // В ответе Open Library книги лежат в поле "docs"
+      // В ответе книги лежат в поле "docs"
       final List<dynamic> docs = response.data['docs'] as List<dynamic>;
 
-      // Преобразуем каждый doc в удобный JSON под нашу модель Content
       final List<Content> content = docs.map((e) {
         final doc = e as Map<String, dynamic>;
 
-        final String id = (doc['key'] ?? '') as String;
+        // key вида "/works/OL82563W" → вырежем только id "OL82563W"
+        final String rawKey = (doc['key'] ?? '') as String;
+        final String id = rawKey.replaceFirst('/works/', '');
+
         final String title = (doc['title'] ?? 'No title') as String;
 
-        // author_name — список, берём первого автора
+        // author_name — список авторов, берем первого
         final List<dynamic>? authors = doc['author_name'] as List<dynamic>?;
         final String author = (authors != null && authors.isNotEmpty)
             ? authors.first.toString()
@@ -39,19 +41,18 @@ class ContentRepository implements ContentRepositoryInterface {
 
         final int? year = doc['first_publish_year'] as int?;
 
-        // cover_i → картинка
+        // cover_i → id обложки
         final int? coverId = doc['cover_i'] as int?;
         final String imageUrl = coverId != null
             ? 'https://covers.openlibrary.org/b/id/$coverId-M.jpg'
             : 'https://via.placeholder.com/100x150?text=No+Cover';
 
-        // собираем мапу под Content.fromJson
+        // Собираем map под нашу модель Content
         final mapForContent = <String, dynamic>{
           'id': id,
           'title': title,
           'author': author,
-          'description':
-              'First publish year: ${year ?? 'unknown'}', // просто инфа
+          'description': 'First publish year: ${year ?? 'unknown'}',
           'image': imageUrl,
         };
 

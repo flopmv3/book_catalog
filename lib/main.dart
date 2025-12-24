@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MainApp());
-}
+import 'book_app.dart';
+import 'di/di.dart';
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
-    );
-  }
+  await setupLocator();
+
+  FlutterError.onError = (details) {
+    talker.handle(details.exception, details.stack);
+  };
+
+  runApp(const BookApp());
 }

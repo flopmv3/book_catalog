@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../features/home/book_mock.dart';
 
 class ContentCard extends StatelessWidget {
-  const ContentCard({super.key});
+  final Book book;
+
+  const ContentCard({
+    super.key,
+    required this.book,
+  });
 
   @override
   Widget build(BuildContext context) {
     const imageSize = 100.0;
 
     return InkWell(
-      // позже сюда добавим переход на экран деталей
-      // onTap: () => context.push('/content/${content.id}'),
+      onTap: () => context.push('/content/${book.id}'),
       borderRadius: BorderRadius.circular(16),
       child: SizedBox(
         height: imageSize,
@@ -19,7 +26,7 @@ class ContentCard extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
               child: Image.asset(
-                'assets/images/test_image.jpg', // картинку добавим позже
+                book.imagePath,
                 height: imageSize,
                 width: imageSize,
                 fit: BoxFit.cover,
@@ -32,7 +39,7 @@ class ContentCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Название книги',
+                    book.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleLarge,
@@ -40,7 +47,7 @@ class ContentCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Expanded(
                     child: Text(
-                      'Краткое описание книги. Здесь будет аннотация или первые строки описания.',
+                      book.description,
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodyMedium,

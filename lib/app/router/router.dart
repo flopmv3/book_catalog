@@ -4,6 +4,7 @@ import 'package:talker_flutter/talker_flutter.dart';
 
 import '../../di/di.dart';
 import '../features/home/home_screen.dart';
+import '../features/content/content_screen.dart';
 
 final _rootNavigationKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 
@@ -20,13 +21,14 @@ final router = GoRouter(
         child: const HomeScreen(),
       ),
     ),
-    // на будущее:
-    // GoRoute(
-    //   path: '/content/:id',
-    //   pageBuilder: (_, state) => MaterialPage(
-    //     key: state.pageKey,
-    //     child: ContentScreen(contentId: state.pathParameters['id']!),
-    //   ),
-    // ),
+    GoRoute(
+      path: '/content/:id',
+      pageBuilder: (_, state) => MaterialPage(
+        key: state.pageKey,
+        child: ContentScreen(
+          contentId: state.pathParameters['id']!,
+        ),
+      ),
+    ),
   ],
 );

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import '../../extensions/widget_extensions.dart';
 import '../../widgets/content_card.dart';
+import 'book_mock.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -27,8 +29,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ListView.separated(
               primary: false,
               shrinkWrap: true,
-              itemCount: 10, // пока просто 10 заглушек
-              itemBuilder: (_, __) => const ContentCard(),
+              itemCount: mockBooks.length,
+              itemBuilder: (_, index) => ContentCard(book: mockBooks[index]),
               separatorBuilder: (_, __) => 16.ph,
             ),
           ],
